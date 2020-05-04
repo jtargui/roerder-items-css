@@ -7,8 +7,27 @@
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v3">docs</a> will be your guide.
-  </p>
+
+  {{ 'HELLO' | translate }}
+
+  <button ion-button="">test</button>
+
+  <ion-list>
+    <ion-list-header>Header</ion-list-header>
+    <ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+      <ion-item *ngFor="let item of items" (click)="testAlter()">
+        <ion-card >
+          <ion-header>
+            hola
+          </ion-header>
+          <div (click)="testAlter()"> {{item.name }}</div>
+        </ion-card>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+
+  <button ion-button (click)="readBarCode()">BAR CODE</button>
+  <button ion-button (click)="startSubroutine()">Start Sub</button>
+  <button ion-button (click)="stopSubRoutine()">Stop Sub</button>
+
 </ion-content>
