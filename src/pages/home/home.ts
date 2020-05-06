@@ -4,6 +4,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import 'rxjs/add/observable/interval';
 import {Observable} from "rxjs";
+import {SpeechRecognition} from "@ionic-native/speech-recognition";
 
 @Component({
   selector: 'page-home',
@@ -14,15 +15,28 @@ export class HomePage implements OnInit {
 
   items = [];
   sub: any;
-  constructor(public navCtrl: NavController, translate: TranslateService, public barcodeScanner: BarcodeScanner) {
+  isSpeechRecognitionAvailable: boolean;
+  textRead: string = "Pulsa listen!";
+  assistantName: string;
+
+  constructor(public navCtrl: NavController, translate: TranslateService, public barcodeScanner: BarcodeScanner, public speechRecognition: SpeechRecognition) {
     translate.setDefaultLang('es');
+    /*
     for (let x = 0; x < 50; x++) {
       this.items.push({id:x, name: x});
     }
+    */
   }
 
   ngOnInit(): void {
-    this.startSubroutine();
+    //this.startSubroutine();
+    this.speechRecognition.isRecognitionAvailable()
+    .then((available: boolean) =>  {
+      console.log(available);
+      this.isSpeechRecognitionAvailable = true;
+      //this.startListening();
+     }
+    );
   }
 
   startSubroutine() {
@@ -62,4 +76,68 @@ export class HomePage implements OnInit {
     });
   }
 
+  // Hablación
+
+  startListening() {
+    // Start the recognition process
+    this.textRead = "Te eschuco...";
+      this.speechRecognition.startListening({
+        language: 'es-ES',
+        matches: 5,
+        prompt: "Dime algo",      // Android only
+        showPopup: true,  // Android only
+        showPartial: false
+      }).subscribe(
+        (matches: Array<string>) => {
+          console.log(matches);
+          if (matches) {
+            var resultIsOk = false;
+            matches.forEach( item => {
+              if (!resultIsOk && item.toLowerCase().includes(this.assistantName.toLowerCase())) {
+                // Eliminamos la palabra clave
+                item = item.toLowerCase().replace(this.assistantName.toLowerCase(), '');
+
+                // Quitamos los espacios en blanco
+                const search = ' ';
+                const searchRegExp = new RegExp(search, 'g'); // Throws SyntaxError
+                const replaceWith = '';
+                item = item.replace(searchRegExp, replaceWith);
+                console.log(item);
+
+                // En el caso de es-ES tratamos las palabras de separación de decimales "con", ","...
+                if (item.includes('con')) {
+                  item = item.replace('con', '.');
+                } else {
+                  item = item.replace(',', '.');
+                }
+
+                // Si el valor es un numerico válido, lo añadimos
+                if (!isNaN(parseFloat(item))){
+                  this.items.push({id:1, name: parseFloat(item)});
+                  resultIsOk = true;
+                  console.log(this.items);
+                }
+              }
+            });
+
+            if (!resultIsOk) {
+              this.textRead = "Vocaliza mejor. Amigo, ¿Eres de Palomares?";
+            } else {
+              this.textRead = "Pulsa listen!";
+            }
+            console.log(this.textRead);
+            //this.startListening();
+          }
+        },
+        (onerror) => {
+          console.log('error:', onerror);
+          this.textRead = onerror;
+        }
+      );
+  }
+
+
+  reverseItems() {
+    return this.items.reverse();
+  }
 }

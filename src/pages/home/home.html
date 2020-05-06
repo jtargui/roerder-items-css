@@ -8,18 +8,21 @@
 
 <ion-content padding>
 
-  {{ 'HELLO' | translate }}
 
-  <button ion-button="">test</button>
+  <div>{{textRead}}</div>
+
+  <ion-item>
+    <label>Nombre:</label>
+    <ion-input type="text" placeholder="Nombre del asistente virtual" [(ngModel)] ="assistantName"></ion-input>
+  </ion-item>
+
+  <button ion-button (click)="startListening()">Listen</button>
 
   <ion-list>
     <ion-list-header>Header</ion-list-header>
-    <ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-      <ion-item *ngFor="let item of items" (click)="testAlter()">
+    <ion-item-group reorder="false" (ionItemReorder)="reorderItems($event)">
+      <ion-item *ngFor="let item of reverseItems()" (click)="testAlter()">
         <ion-card >
-          <ion-header>
-            hola
-          </ion-header>
           <div (click)="testAlter()"> {{item.name }}</div>
         </ion-card>
       </ion-item>
