@@ -16,6 +16,18 @@
     <ion-input type="text" placeholder="Nombre del asistente virtual" [(ngModel)] ="assistantName"></ion-input>
   </ion-item>
 
+  <hr>
+
+  <div>
+    <button ion-button *ngIf="!this.sharedVariableService.getIsOrderActive()" (click)="toogleOrder(true)"> Activar </button>
+    <button ion-button *ngIf="this.sharedVariableService.getIsOrderActive()" (click)="toogleOrder(false)"> Desactivar </button>
+  </div>
+
+
+  <subcomponent></subcomponent>
+
+  <hr>
+
   <button ion-button (click)="startListening()">Listen</button>
 
   <ion-list>

@@ -12,6 +12,9 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {DragulaModule} from "ng2-dragula";
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {SpeechRecognition} from "@ionic-native/speech-recognition";
+import { SharedVariablesService} from "../service/shared-variable-service";
+import {SubcomponentComponent} from "../components/subcomponent/subcomponent";
+import {Subcomponent2Component} from "../components/subcomponent2/subcomponent2";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -20,7 +23,9 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    SubcomponentComponent,
+    Subcomponent2Component
   ],
   imports: [
     BrowserModule,
@@ -45,6 +50,7 @@ export function createTranslateLoader(http: HttpClient) {
     SplashScreen,
     BarcodeScanner,
     SpeechRecognition,
+    SharedVariablesService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

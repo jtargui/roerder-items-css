@@ -1,0 +1,8 @@
+<!-- Generated template for the SubcomponentComponent component -->
+<div>
+  <button ion-button *ngIf="!this.sharedVariableService.getIsOrderActive()" (click)="toogleOrder(true)"> Activar </button>
+  <button ion-button *ngIf="this.sharedVariableService.getIsOrderActive()" (click)="toogleOrder(false)"> Desactivar </button>
+</div>
+
+
+<subcomponent2></subcomponent2>

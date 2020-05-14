@@ -5,6 +5,7 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import 'rxjs/add/observable/interval';
 import {Observable} from "rxjs";
 import {SpeechRecognition} from "@ionic-native/speech-recognition";
+import {SharedVariablesService} from "../../service/shared-variable-service";
 
 @Component({
   selector: 'page-home',
@@ -18,25 +19,30 @@ export class HomePage implements OnInit {
   isSpeechRecognitionAvailable: boolean;
   textRead: string = "Pulsa listen!";
   assistantName: string;
+  isOrderActive: boolean;
 
-  constructor(public navCtrl: NavController, translate: TranslateService, public barcodeScanner: BarcodeScanner, public speechRecognition: SpeechRecognition) {
+  constructor(public navCtrl: NavController,
+              translate: TranslateService,
+              public barcodeScanner: BarcodeScanner,
+              public speechRecognition: SpeechRecognition,
+              public sharedVariableService: SharedVariablesService) {
     translate.setDefaultLang('es');
-    /*
-    for (let x = 0; x < 50; x++) {
-      this.items.push({id:x, name: x});
-    }
-    */
+  }
+
+  toogleOrder(b: boolean) {
+    this.sharedVariableService.setOrderActive(b);
   }
 
   ngOnInit(): void {
     //this.startSubroutine();
+    /*
     this.speechRecognition.isRecognitionAvailable()
     .then((available: boolean) =>  {
       console.log(available);
       this.isSpeechRecognitionAvailable = true;
       //this.startListening();
      }
-    );
+    );*/
   }
 
   startSubroutine() {
@@ -135,7 +141,6 @@ export class HomePage implements OnInit {
         }
       );
   }
-
 
   reverseItems() {
     return this.items.reverse();
